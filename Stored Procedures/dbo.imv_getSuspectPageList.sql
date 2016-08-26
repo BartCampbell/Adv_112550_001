@@ -50,8 +50,8 @@ BEGIN
 			LEFT JOIN tblScannedDataPageStatus SDPS WITH (NOLOCK) ON SDPS.ScannedData_PK =  SD.ScannedData_PK AND SDPS.CoderLevel = @level
 		WHERE (@is_admin=1 OR ISNULL(SD.is_deleted,0)=0)
 		ORDER BY SD.Suspect_PK,DocumentType_PK
-			--,--CASE WHEN ISNUMERIC(LEFT(RIGHT(Filename,LEN(Filename)-CharIndex('_'+CAST(SD.DocumentType_PK AS VARCHAR)+'_',Filename)-2),CharIndex('_',RIGHT(Filename,LEN(Filename)-CharIndex('_'+CAST(SD.DocumentType_PK AS VARCHAR)+'_',Filename)-2))-1))=0 THEN
-			--	SD.ScannedData_PK
+			,--CASE WHEN ISNUMERIC(LEFT(RIGHT(Filename,LEN(Filename)-CharIndex('_'+CAST(SD.DocumentType_PK AS VARCHAR)+'_',Filename)-2),CharIndex('_',RIGHT(Filename,LEN(Filename)-CharIndex('_'+CAST(SD.DocumentType_PK AS VARCHAR)+'_',Filename)-2))-1))=0 THEN
+				SD.ScannedData_PK
 			--ELSE
 			--	CAST(LEFT(RIGHT(Filename,LEN(Filename)-CharIndex('_'+CAST(SD.DocumentType_PK AS VARCHAR)+'_',Filename)-2),CharIndex('_',RIGHT(Filename,LEN(Filename)-CharIndex('_'+CAST(SD.DocumentType_PK AS VARCHAR)+'_',Filename)-2))-1) AS INT)
 			--END
@@ -62,5 +62,4 @@ BEGIN
 --	SELECT ScanningQANote_PK, QANote_Text FROM tblScanningQANote
 --	SELECT ScanningQANote_PK from tblScanningQANote_Suspect Where Suspect_PK=@Suspect
 END
-
 GO

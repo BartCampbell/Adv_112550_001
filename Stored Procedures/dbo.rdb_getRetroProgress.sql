@@ -41,7 +41,8 @@ BEGIN
 	FROM tblSuspect S WITH (NOLOCK)
 			INNER JOIN #tmpProject AP ON AP.Project_PK = S.Project_PK
 			INNER JOIN tblProvider P WITH (NOLOCK) ON P.Provider_PK = S.Provider_PK
-			INNER JOIN tblProviderOfficeSchedule PO WITH (NOLOCK) ON P.ProviderOffice_PK = PO.ProviderOffice_PK AND S.Project_PK = PO.Project_PK
+			LEFT JOIN tblProviderOfficeSchedule PO WITH (NOLOCK) ON P.ProviderOffice_PK = PO.ProviderOffice_PK AND S.Project_PK = PO.Project_PK
+	WHERE PO.ProviderOffice_PK IS NOT NULL OR S.Scanned_Date IS NOT NULL
 	--GROUP BY S.Project_PK,S.Provider_PK
 	CREATE CLUSTERED INDEX  idxTProjectPK ON #tmp (Project_PK,Provider_PK)
 	/*
@@ -63,6 +64,7 @@ BEGIN
 			,SUM(CASE WHEN S.IsCoded=1 AND S.IsScanned=1 THEN 1 ELSE 0 END) Coded
 		INTO #tmpX
 		FROM tblSuspect S WITH (NOLOCK) 
+			INNER JOIN #tmpProject AP ON AP.Project_PK = S.Project_PK
 			INNER JOIN tblMember M WITH (NOLOCK) ON M.Member_PK = S.Member_PK
 			LEFT JOIN #tmp T ON S.Project_PK = T.Project_PK AND S.Provider_PK = T.Provider_PK
 		GROUP BY S.ChartPriority --ORDER BY ChartPriority
