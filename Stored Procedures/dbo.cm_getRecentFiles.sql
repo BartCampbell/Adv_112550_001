@@ -44,6 +44,7 @@ BEGIN
 			RETRY_NextAssign: -- Transaction RETRY
 			BEGIN TRANSACTION
 			BEGIN TRY
+			/*
 				IF (@User IN (0)) --Provider Portal
 				BEGIN
 					SET @ExtractionQueueSource_PK = 3
@@ -58,13 +59,14 @@ BEGIN
 				END
 				ELSE
 				BEGIN
+				*/
 					SELECT TOP 1 @ExtractionQueueSource_PK=ExtractionQueueSource_PK, @OfficeFaxOrID=OfficeFaxOrID FROM tblExtractionQueue WHERE AssignedUser_PK IS NULL ORDER BY UploadDate ASC
 					IF (@OfficeFaxOrID IS NULL)
 					BEGIN
 						SET @Records = 25
 						SET @OfficeFaxOrID = '0'
 					END
-				END
+				--END
 				
 				;
 				with tbl as (
