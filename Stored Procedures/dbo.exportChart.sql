@@ -73,16 +73,22 @@ BEGIN
 					ON p.ProviderMaster_PK = pm.ProviderMaster_PK
 				INNER JOIN tblMember m  WITH (NOLOCK)
 					ON s.Member_PK = m.Member_PK
+				INNER JOIN dbo.tblScannedData sd 
+					ON sd.Suspect_PK = s.Suspect_PK
 				--LEFT JOIN tmpExportChases t 
 				--	ON s.Suspect_PK = t.Suspect_PK
 		WHERE	
 				--t.Suspect_PK IS NULL
 				--AND
-				s.IsScanned = 1
+				s.IsScanned = 1 AND sd.is_deleted=0
 				AND 
-				s.Suspect_PK IN
+				s.Suspect_PK NOT IN
 				(SELECT DISTINCT sus.Suspect_PK FROM dbo.tblsuspect sus
-					INNER JOIN dbo.ChartExtract_40788 bc ON bc.enrolleeid = sus.edgememberID) --37755 Sample
+					INNER JOIN dbo.ChartExtract_40788 bc ON bc.enrolleeid = sus.edgememberID
+					UNION
+                    SELECT DISTINCT sus.Suspect_PK FROM dbo.tblsuspect sus
+					INNER JOIN dbo.ChartExtract_37755 bc ON bc.enrolleeid = sus.edgememberID
+					) --37755 Sample
 			
 
 		--*****************************************************************************
