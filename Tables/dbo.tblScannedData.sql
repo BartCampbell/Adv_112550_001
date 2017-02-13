@@ -12,6 +12,8 @@ CREATE TABLE [dbo].[tblScannedData]
 GO
 ALTER TABLE [dbo].[tblScannedData] ADD CONSTRAINT [PK_tblScannedData] PRIMARY KEY CLUSTERED  ([ScannedData_PK]) WITH (FILLFACTOR=80) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [IDX_DocType] ON [dbo].[tblScannedData] ([DocumentType_PK]) INCLUDE ([CodedStatus], [dtInsert], [FileName], [is_deleted], [ScannedData_PK], [Suspect_PK], [User_PK]) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [IDX_DocPK] ON [dbo].[tblScannedData] ([DocumentType_PK]) INCLUDE ([is_deleted], [Suspect_PK]) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [IX_tblScannedData_Suspect] ON [dbo].[tblScannedData] ([Suspect_PK]) WITH (FILLFACTOR=80) ON [PRIMARY]
